@@ -2,6 +2,8 @@ package com.randomWord.API.Services;
 
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
+
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 //import org.apache.poi.xssf.usermodel.XSSFRichTextString;
@@ -16,6 +18,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import com.randomWord.API.Entities.WordEntity;
@@ -110,14 +113,22 @@ public class WordService {
         
     }
     
+   // It will check if the word has already an entry on the data basis
+   // and in case it is not present, the word will be saved
     public void checkWord(String word) {
     	try {
     		WordEntity searchWord = repository.findByWordNameIgnoreCase(word).get(); 
-    		//WordEntity hola2 = new WordEntity("Iterando sobre párafos");
     	}	
     	catch (Exception e) {	
-            WordEntity newWord = new WordEntity(word);
-            repository.save(newWord);
+    		WordEntity newWord = new WordEntity(word);
+    		e.printStackTrace();
+            try {            	
+                repository.save(newWord);
+            } 
+            catch (NoSuchElementException p){
+                repository.save(newWord);
+                p.printStackTrace();
+            }
 
     	}
     }
@@ -127,24 +138,22 @@ public class WordService {
         try (FileInputStream fis = new FileInputStream(fileRoot)) {
             // Load document
             XWPFDocument document = new XWPFDocument(fis);
-            String[] elements = {"!", "¡", ".", ",", "¿", "?"};
+            
+            String[] elements = {"!", "¡", ".", ",", "¿", "?", ":", "...", "(", ")"};
             String[] shortWords = {"y", "o", "la", "el", "él", "a", "tus", "ella", "los"};
-;            // Get paragraphs
-            //WordEntity hola = new WordEntity("Se ha ejecutado");
-            //repository.save(hola);
+;          
+			// Get paragraphs
             for (XWPFParagraph paragraph : document.getParagraphs()) {
+            	
                 // For each paragraph it will break the words and check if they are already in the data base
                 String paragraphText = extractText(paragraph);
-                //LOGGER.info("Extracted Text: " + paragraphText);
-                //WordEntity hola2 = new WordEntity("Iterando sobre párafos");
-                //repository.save(hola2);
                 String[] words = paragraphText.split(" ");
+                
+                // Apply filter to save only relevant words
                 for (String word : words) {     
-                	//WordEntity hola3 = new WordEntity("Palabras");
-                    //repository.save(hola3);
                     for ( String character : elements) {
                     	if (word.contains(character)) {
-                    		word = word.replaceAll(character, "");       
+                    		word = word.replace(character, "");       
                     	}
                     }
                     for ( String character : shortWords) {
@@ -152,6 +161,10 @@ public class WordService {
                     		word = "";       
                     	}
                     }
+                    if (isNumeric(word)) {
+                    	word = "";
+                    }
+                    
                     if (word.trim().isEmpty()) {
                     	
                     } else {
@@ -162,8 +175,9 @@ public class WordService {
             }
 
             document.close();
-        }   catch (IOException e) {
- 
+        }   
+        catch (Exception e) {
+        	e.printStackTrace();
         }
 
     }
@@ -177,6 +191,13 @@ public class WordService {
         return text.toString();
     }
     
+    // Verify if the word is a number, in this case it will return true. Otherwise
+    // it will return false
+    public static boolean isNumeric(String str) {
+        return str.matches("-?\\d+(\\.\\d+)?");
+    }
+    
+    // Search and delete all entries that has the same word name as the parameter.
     public void deleteMultiples(String word) {
     	byte length = (byte) word.length();
     	List<WordEntity> toBeDeletedWords = repository.findByWordNameIgnoreCaseAndWordLength(word, length);

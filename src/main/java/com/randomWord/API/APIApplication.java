@@ -20,8 +20,7 @@ public class APIApplication {
 
 
 		SpringApplication.run(APIApplication.class, args);
-	    DataService dataUpdate = new DataService("/home/mayra/Documentos/Teste-agujero.docx");
-	    System.out.print(dataUpdate);
-	}    
+	
+	}   
 
 }

@@ -12,10 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import com.randomWord.API.Entities.WordEntity;
 import com.randomWord.API.Services.WordService;
 
-/*
- * PONER UNA RUTA QUE VA A RECIBIR LA DIRECCIÓN DEL ARCHIVO Y SUBIR LAS PALABRAS
- * 
- */
 
 @RestController
 public class WordController {
@@ -105,16 +101,20 @@ public class WordController {
         service.deleteMultiples(word);
     }
     
-    @GetMapping("/update/bbdd")
-    public String updateDataBase() {
-    	//String code = resourceBundle.getString("PASS");
-    	//String pass = secret_pass;
-    	try {
-    		String filepath = "/home/mayra/Documentos/Teste-agujero.docx";
-		    service.updateDataBase(filepath);
-		    return "El update fue concluído";  		
-    	} catch (Exception e) {
-    		return "Hubo un problema y el proceso no se pudo concluir";
+    @GetMapping("/update/{secret_pass}")
+    public String updateDataBase(@PathVariable String secret_pass) {
+    	String code = resourceBundle.getString("PASS");
+    	String pass = secret_pass;
+    	if (secret_pass.equals(pass)) {
+	    	try {
+	    		String filepath = "/home/mayra/Documentos/Teste-agujero.docx";
+			    service.updateDataBase(filepath);
+			    return "El update fue concluído";  		
+	    	} catch (Exception e) {
+	    		return "Hubo un problema y el proceso no se pudo concluir";
+	    	}
+    	} else {
+    		return "No tienes permiso";
     	}
     }
 }
