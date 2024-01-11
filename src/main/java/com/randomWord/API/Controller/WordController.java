@@ -105,7 +105,7 @@ public class WordController {
     public String updateDataBase(@PathVariable String secret_pass) {
     	String code = resourceBundle.getString("PASS");
     	String pass = secret_pass;
-    	if (secret_pass.equals(pass)) {
+    	if (secret_pass.equals(code)) {
 	    	try {
 	    		String filepath = "/home/mayra/Documentos/Teste-agujero.docx";
 			    service.updateDataBase(filepath);
