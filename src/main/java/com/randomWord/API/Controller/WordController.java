@@ -63,6 +63,11 @@ public class WordController {
     public Optional<List<WordEntity>> withLength(@PathVariable byte length) {   
         return service.withLength(length);
     }
+    
+    @GetMapping("/length/{length}/range/{range}")
+    public Optional<List<WordEntity>> withLength(@PathVariable byte length, @PathVariable int range) {   
+        return service.filterXWordsWithLength(length, range);
+    }
 
     @GetMapping("/change/{wordToChange}/{newName}")
     public String updateWord(@PathVariable String wordToChange, @PathVariable String newName) {

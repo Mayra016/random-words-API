@@ -72,6 +72,10 @@ public class WordService {
         return repository.findByWordLength(length);
     }
     
+    // filter x words by a specific range
+    public Optional<List<WordEntity>> filterXWordsWithLength(byte length, int range) {
+    	return repository.findRandomWordsByRequisito(length, range);
+    }
     // update word
     public void updateName(String name, String newName) {
         Optional<WordEntity> toUpdateWord = repository.findByWordNameIgnoreCase(name);
