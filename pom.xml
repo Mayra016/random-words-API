@@ -97,12 +97,6 @@
 	        <version>4.1.2</version> <!-- Verifica la última versión en el repositorio Maven -->
 	    </dependency>
 
-		<!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
-		<dependency>
-		    <groupId>org.postgresql</groupId>
-		    <artifactId>postgresql</artifactId>
-		    <version>42.6.0</version>
-		</dependency>
 
 
 
