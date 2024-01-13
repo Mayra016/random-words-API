@@ -56,9 +56,19 @@ public class WordController {
         return service.beginsWith(firstLetter);
     }
     
+    @GetMapping("/beginsWith/{firstLetter}/range/{range}")
+    public Optional<List<WordEntity>> beginsWithLength(@PathVariable String firstLetter, @PathVariable byte range) {
+        return service.beginsWithAndLength(firstLetter, range);
+    }
+    
     @GetMapping("/endsWith/{lastLetter}")
     public Optional<List<WordEntity>> endsWithLetter(@PathVariable String lastLetter) {
         return service.endsWith(lastLetter);
+    }
+    
+    @GetMapping("/endsWith/{lastLetter}/range/{range}")
+    public Optional<List<WordEntity>> endsWithLetterLength(@PathVariable String lastLetter, @PathVariable byte range) {
+        return service.endsWithAndLength(lastLetter, range);
     }
     
     @GetMapping("/length/{length}")

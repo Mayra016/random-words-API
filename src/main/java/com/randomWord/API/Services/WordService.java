@@ -12,6 +12,8 @@ import java.util.logging.Level;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.io.FileInputStream;
@@ -61,10 +63,24 @@ public class WordService {
         return wordsWithFirstLetter;
     }
     
+    // search for words that begins with a specific letter and has the specified length
+    public Optional<List<WordEntity>> beginsWithAndLength(String letter, byte length){
+    	double seed = Math.random();
+    	Optional<List<WordEntity>> words = repository.findByWordNameStartingWithAndQuantity(letter, seed, length);
+        return words;
+    }
+    
     // search for words that ends with a specific letter
     public Optional<List<WordEntity>> endsWith(String endLetter) {
     	Optional<List<WordEntity>> wordsWithLastLetter = repository.findByWordNameEndingWith(endLetter);
         return wordsWithLastLetter;
+    }
+    
+    // search for words that ends with a specific letter and matches the specified length
+    public Optional<List<WordEntity>> endsWithAndLength(String endLetter, byte length) {
+    	double seed = Math.random();
+    	Optional<List<WordEntity>> words = repository.findByWordNameEndingWithAndQuantity(endLetter, seed, length);
+        return words;
     }
     
     // filter by length

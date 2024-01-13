@@ -1,4 +1,4 @@
-#https://www.youtube.com/watch?v=p3AIecyvok4
+
 FROM maven:3.8.5-openjdk-17 AS build
 
 ARG MYSQLHOST
