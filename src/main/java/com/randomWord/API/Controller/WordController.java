@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,6 +32,7 @@ public class WordController {
     }
     
     @GetMapping("/add/{newWord}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String addNewWord(@PathVariable String newWord) {
     	String message;
     	try {
@@ -70,6 +72,7 @@ public class WordController {
     }
 
     @GetMapping("/change/{wordToChange}/{newName}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String updateWord(@PathVariable String wordToChange, @PathVariable String newName) {
         try {
         	service.updateName(wordToChange, newName);
@@ -80,6 +83,7 @@ public class WordController {
     }    
     
     @GetMapping("/delete/{word}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String deleteSpecificWord(@PathVariable String word) {
         boolean ok = service.deleteWord(word);
         
@@ -91,6 +95,7 @@ public class WordController {
     }
     
     @GetMapping("/deleteId/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String deleteId(@PathVariable Long id) {
         boolean ok = service.deleteWordId(id);
         
@@ -102,11 +107,13 @@ public class WordController {
     }
     
     @GetMapping("/deleteMulti/{word}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public void deleteMulti(@PathVariable String word) {
         service.deleteMultiples(word);
     }
     
     @GetMapping("/update/{secret_pass}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String updateDataBase(@PathVariable String secret_pass) {
     	String code = resourceBundle.getString("PASS");
     	String pass = secret_pass;
