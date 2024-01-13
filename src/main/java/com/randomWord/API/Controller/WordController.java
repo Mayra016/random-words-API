@@ -20,11 +20,7 @@ public class WordController {
     WordService service;
     
     ResourceBundle resourceBundle = ResourceBundle.getBundle("text");
-    
-    @GetMapping("/home")
-    public String home() {
-    	return "index";
-    }
+   
     
     @GetMapping("/list")
     public List<WordEntity> list() {
